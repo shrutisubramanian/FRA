@@ -1,96 +1,203 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import geoJsonData from "./india_states.geojson"; // Make sure this file is correctly placed in your project
+// App.js
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import './App.css';
 
-function App() {
-  const fraData = [
-    { state: "Telangana", coords: [17.1232, 79.2088], holder: "Ravi Kumar - Adilabad" },
-    { state: "Madhya Pradesh", coords: [22.9734, 78.6569], holder: "Sita Devi - Mandla" },
-    { state: "Tripura", coords: [23.9408, 91.9882], holder: "Bimal Das - West Tripura" },
-    { state: "Odisha", coords: [20.9517, 85.0985], holder: "Laxmi Nayak - Kandhamal" },
-    { state: "Jammu & Kashmir", coords: [33.277839, 75.341218], holder: "Kiran Sharma - Jammu" },
-  ];
+// ✅ Explicit mapping: state → array of {file, type}
+const stateData = {
+  'Madhya Pradesh': [
+    { file: 'mp_forest.geojson', type: 'forest' },
+    { file: 'mp_water.geojson', type: 'water' },
+    { file: 'mp_agriculture.geojson', type: 'agriculture' }
+  ],
+  'Telangana': [
+    { file: 'ts_forest.geojson', type: 'forest' },
+    { file: 'ts_water.geojson', type: 'water' },
+    { file: 'ts_agriculture.geojson', type: 'agriculture' }
+  ],
+  'Odisha': [
+    { file: 'od_forest.geojson', type: 'forest' },
+    { file: 'od_water.geojson', type: 'water' },
+    { file: 'od_agriculture.geojson', type: 'agriculture' }
+  ],
+  'Tripura': [
+    { file: 'tr_forest.geojson', type: 'forest' },
+    { file: 'tr_water.geojson', type: 'water' },
+    { file: 'tr_agriculture.geojson', type: 'agriculture' }
+  ]
+};
 
-  const disputedAreas = [
-    { name: "Spanggur Gap", coords: [33.5575, 78.732] },
-    { name: "Siachen Glacier", coords: [35.421111, 77.109444] },
-    { name: "Dhola Post", coords: [27.818056, 91.673611] },
-    { name: "Barahoti Plains", coords: [30.8333, 79.9667] },
-  ];
+// ✅ State center coordinates
+const mapCenters = {
+  'Madhya Pradesh': [22.9734, 78.6569],
+  'Telangana': [17.8741, 79.2312],
+  'Odisha': [20.2976, 85.8277],
+  'Tripura': [23.7533, 91.7371],
+};
 
-  const INDIA_BOUNDS = [
-    [6.44, 68.11], // Southern and western extent of India
-    [35.51, 97.24], // Northern and eastern extent of India
-  ];
+// ✅ Styles for asset layers
+const assetStyles = {
+  forest: { fillColor: '#228B22', color: '#228B22', weight: 1, opacity: 0.9, fillOpacity: 0.5 },
+  water: { fillColor: '#1E90FF', color: '#1E90FF', weight: 1, opacity: 0.9, fillOpacity: 0.7 },
+  agriculture: { fillColor: '#daa520', color: '#daa520', weight: 1, opacity: 0.9, fillOpacity: 0.5 },
+};
 
-  // List of Indian states and Union Territories (post-2019)
-  const indianRegions = [
-    "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
-    "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Goa",
-    "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka",
-    "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
-    "Mizoram", "Nagaland", "Odisha", "Puducherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-    "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
-  ];
+// ✅ Detect swapped lat/lon and fix
+const looksLikeLatLon = (x, y) => {
+  return x >= 6 && x <= 38 && y >= 68 && y <= 98;
+};
+function normalizeGeoJSON(geojson) {
+  if (!geojson?.features) return geojson;
+  const newFeatures = geojson.features.map((f) => {
+    if (f.geometry?.type === 'Point') {
+      const [a, b] = f.geometry.coordinates;
+      if (looksLikeLatLon(a, b)) {
+        f.geometry.coordinates = [b, a]; // swap to [lon,lat]
+      }
+    }
+    return f;
+  });
+  return { ...geojson, features: newFeatures };
+}
+
+// ✅ Zoom handler
+const MapUpdater = ({ stateName, assetData }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (!stateName) return;
+
+    // fly to state center
+    if (mapCenters[stateName]) {
+      map.flyTo(mapCenters[stateName], 7, { animate: true });
+    }
+
+    // fit to loaded asset points
+    const coords = [];
+    assetData.forEach((a) => {
+      a?.data?.features?.forEach((f) => {
+        if (f.geometry?.type === 'Point') {
+          const [lon, lat] = f.geometry.coordinates;
+          coords.push([lat, lon]);
+        }
+      });
+    });
+
+    if (coords.length > 0) {
+      const bounds = L.latLngBounds(coords);
+      map.fitBounds(bounds.pad(0.25), { animate: true, maxZoom: 12 });
+    }
+  }, [map, stateName, assetData]);
+  return null;
+};
+
+const App = () => {
+  const [selectedState, setSelectedState] = useState(null);
+  const [assetData, setAssetData] = useState([]);
+
+  // ✅ Load GeoJSON when state is selected
+  useEffect(() => {
+    if (!selectedState) {
+      setAssetData([]);
+      return;
+    }
+
+    const loadAssets = async () => {
+      const assets = stateData[selectedState];
+      const results = await Promise.all(
+        assets.map(async ({ file, type }) => {
+          const url = `${process.env.PUBLIC_URL}/data/${file}`;
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+            const normalized = normalizeGeoJSON(json);
+            return { type, data: normalized };
+          } catch (err) {
+            console.error(`Failed to fetch ${file}:`, err);
+            return null;
+          }
+        })
+      );
+      setAssetData(results.filter(Boolean));
+    };
+    loadAssets();
+  }, [selectedState]);
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <h2 style={{ textAlign: "center" }}>
-        🌍 FRA WebGIS Prototype (India Only: 4 States + J&K + Disputed Areas)
-      </h2>
+    <div style={{ height: '100vh', width: '100vw' }}>
+      {/* State Selector */}
+      <div
+        style={{
+          position: 'absolute',
+          zIndex: 1000,
+          top: 10,
+          left: 10,
+          background: 'white',
+          padding: 10,
+          borderRadius: 6,
+        }}
+      >
+        <label>Select State</label>
+        <br />
+        <select
+          value={selectedState || ''}
+          onChange={(e) => setSelectedState(e.target.value)}
+        >
+          <option value="">-- Select a State --</option>
+          {Object.keys(stateData).map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+      </div>
 
+      {/* ✅ Map always visible */}
       <MapContainer
-        bounds={INDIA_BOUNDS}
-        maxBounds={INDIA_BOUNDS}
-        maxBoundsViscosity={1.0}
-        center={[22.5, 82]}
+        center={[22.351114, 78.66774]} // India center
         zoom={5}
-        style={{ height: "90%", width: "100%" }}
-        maxZoom={10} // Restrict zooming out to prevent seeing other countries
-        minZoom={5}  // Ensure India fills the view
+        style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-          noWrap={true}
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          attribution='&copy; OpenStreetMap contributors &copy; CARTO'
+          subdomains={['a', 'b', 'c', 'd']}
         />
 
-        {/* FRA Patta Holders Markers */}
-        {fraData.map((item, index) => (
-          <Marker key={index} position={item.coords}>
-            <Popup>
-              <strong>{item.state}</strong> <br />
-              {item.holder}
-            </Popup>
-          </Marker>
-        ))}
+        <MapUpdater stateName={selectedState} assetData={assetData} />
 
-        {/* Disputed Areas Markers */}
-        {disputedAreas.map((area, index) => (
-          <Marker key={index} position={area.coords}>
-            <Popup>
-              ⚠️ <strong>Disputed Area</strong> <br />
-              {area.name}
-            </Popup>
-          </Marker>
+        {/* Render asset layers */}
+        {assetData.map((asset, idx) => (
+          <GeoJSON
+            key={`${selectedState}-${asset.type}-${idx}`}
+            data={asset.data}
+            style={assetStyles[asset.type]}
+            pointToLayer={(feature, latlng) => {
+              return L.circleMarker(latlng, {
+                radius: asset.type === 'water' ? 6 : 5,
+                fillColor: assetStyles[asset.type].fillColor,
+                color: assetStyles[asset.type].color,
+                weight: 1,
+                opacity: 1,
+                fillOpacity: assetStyles[asset.type].fillOpacity,
+              });
+            }}
+            onEachFeature={(feature, layer) => {
+              const p = feature.properties || {};
+              // ✅ Force popup to use selectedState, not file's state
+              const popup = `<b>${p.name || 'Unknown'}</b><br/>
+                             Type: ${p.asset_type || asset.type}<br/>
+                             Area: ${p.area_ha || 'N/A'} ha<br/>
+                             State: ${selectedState}`;
+              layer.bindPopup(popup);
+            }}
+          />
         ))}
-
-        {/* Indian States and Union Territories Boundary */}
-        <GeoJSON
-          data={geoJsonData}
-          filter={(feature) =>
-            feature.properties && indianRegions.includes(feature.properties.st_nm)
-          }
-          style={{
-            color: "black",
-            weight: 2,
-            fillOpacity: 0,
-          }}
-        />
       </MapContainer>
     </div>
   );
-}
+};
 
 export default App;
