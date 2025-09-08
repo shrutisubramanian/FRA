@@ -1,0 +1,3 @@
+﻿Claimant_Raw,Claimant_EN,Claimant_Lang,Spouse_Raw,Spouse_EN,Spouse_Lang,Father_Raw,Father_EN,Father_Lang,Village_Raw,Village_EN,Village_Lang,District_Raw,District_EN,District_Lang,Tribe_Raw,Tribe_EN,Tribe_Lang,Claim_Area_Raw,Claim_Area_EN,Claim_Area_Lang,SourceFile,OCR_Engine,OCR_Confidence,Processing_Timestamp,Word_Count,Character_Count
+Ramesh Kumar,Ramesh Kumar,en,Sita Devi,Sita Devi,en,Shyam Lal,Shyam Lal,en,Bhartiya,Bhartiya,en,Mandla,Mandla,en,Yes,Yes,en,0.9 hectares,0.9 hectares,en,fra_sample2.jpg,tesseract_original_gray,92.82222222222222,2025-09-07T13:58:07.371367,268,1673
+20250908_181454_fra_sample3.jpg,tesseract_adaptive_thresh,66.5,2025-09-08T18:24:11.272928,1,6

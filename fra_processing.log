@@ -1,0 +1,121 @@
+2025-09-07 13:57:41,001 - INFO - Initializing Advanced OCR Engine...
+2025-09-07 13:57:41,002 - INFO - Loading EasyOCR readers...
+2025-09-07 13:57:41,315 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-07 13:57:42,529 - INFO - Deep Translator initialized successfully
+2025-09-07 13:57:42,543 - INFO - Database initialized successfully
+2025-09-07 13:57:42,544 - INFO - Processing: fra_sample2.jpg
+2025-09-07 13:58:07,366 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-07 13:58:11,851 - INFO - Record saved to database
+2025-09-07 13:58:11,867 - INFO - Record saved to CSV
+2025-09-07 13:58:11,868 - INFO - Processing completed in 29.32s
+2025-09-07 13:58:11,868 - INFO - Extracted 7 fields
+2025-09-07 13:59:11,968 - INFO - Initializing Advanced OCR Engine...
+2025-09-07 13:59:11,968 - INFO - Loading EasyOCR readers...
+2025-09-07 13:59:12,294 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-07 13:59:13,667 - INFO - Deep Translator initialized successfully
+2025-09-07 13:59:13,670 - INFO - Database initialized successfully
+2025-09-07 13:59:13,670 - INFO - Processing: fra_sample2.jpg
+2025-09-07 13:59:33,018 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-07 13:59:33,028 - WARNING - Duplicate record detected - skipping save
+2025-09-07 13:59:33,029 - INFO - Processing completed in 19.36s
+2025-09-07 13:59:33,030 - INFO - Extracted 7 fields
+2025-09-07 14:22:11,832 - INFO - Initializing Advanced OCR Engine...
+2025-09-07 14:22:11,832 - INFO - Loading EasyOCR readers...
+2025-09-07 14:22:12,120 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-07 14:22:13,111 - INFO - Deep Translator initialized successfully
+2025-09-07 14:22:13,111 - INFO - Database initialized successfully
+2025-09-07 14:22:13,111 - INFO - Processing: 20250907_142211_fra_sample2.jpg
+2025-09-07 14:22:31,224 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-07 14:22:31,224 - WARNING - Duplicate record detected - skipping save
+2025-09-07 14:22:31,224 - INFO - Processing completed in 18.11s
+2025-09-07 14:22:31,224 - INFO - Extracted 7 fields
+2025-09-07 14:46:30,876 - INFO - Initializing Advanced OCR Engine...
+2025-09-07 14:46:30,878 - INFO - Loading EasyOCR readers...
+2025-09-07 14:46:31,231 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-07 14:46:33,205 - INFO - Deep Translator initialized successfully
+2025-09-07 14:46:33,225 - INFO - Database initialized successfully
+2025-09-07 14:46:33,252 - INFO - Processing: 20250907_144630_fra_sample2.jpg
+2025-09-07 14:46:58,002 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-07 14:46:58,014 - WARNING - Duplicate record detected - skipping save
+2025-09-07 14:46:58,015 - INFO - Processing completed in 24.76s
+2025-09-07 14:46:58,015 - INFO - Extracted 7 fields
+2025-09-07 14:56:12,534 - INFO - Initializing Advanced OCR Engine...
+2025-09-07 14:56:12,535 - INFO - Loading EasyOCR readers...
+2025-09-07 14:56:12,817 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-07 14:56:13,848 - INFO - Deep Translator initialized successfully
+2025-09-07 14:56:13,850 - INFO - Database initialized successfully
+2025-09-07 14:56:13,851 - INFO - Processing: 20250907_145612_fra_sample2.jpg
+2025-09-07 14:56:33,414 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-07 14:56:33,419 - WARNING - Duplicate record detected - skipping save
+2025-09-07 14:56:33,419 - INFO - Processing completed in 19.57s
+2025-09-07 14:56:33,420 - INFO - Extracted 7 fields
+2025-09-08 17:39:52,409 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 17:39:52,412 - INFO - Loading EasyOCR readers...
+2025-09-08 17:39:52,904 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 17:39:55,156 - INFO - Deep Translator initialized successfully
+2025-09-08 17:39:55,158 - INFO - Database initialized successfully
+2025-09-08 17:39:55,158 - INFO - Processing: 20250908_173952_fra_sample3.jpg
+2025-09-08 17:41:57,348 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 17:41:57,349 - INFO - Loading EasyOCR readers...
+2025-09-08 17:41:57,863 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 17:41:58,796 - INFO - Deep Translator initialized successfully
+2025-09-08 17:41:58,798 - INFO - Database initialized successfully
+2025-09-08 17:41:58,798 - INFO - Processing: 20250908_174157_fra_sample3.jpg
+2025-09-08 17:43:56,356 - INFO - Initializing Enhanced OCR Engine...
+2025-09-08 17:43:56,357 - INFO - Loading EasyOCR readers...
+2025-09-08 17:43:56,848 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 17:43:58,201 - INFO - Database initialized successfully
+2025-09-08 17:43:58,252 - INFO - Starting comprehensive processing of: 20250908_174356_fra_sample3.jpg
+2025-09-08 17:43:58,270 - INFO - Running Tesseract OCR with multiple configurations...
+2025-09-08 17:43:58,518 - INFO - Image loaded successfully with OpenCV: uploads\20250908_174356_fra_sample3.jpg
+2025-09-08 17:43:58,855 - INFO - Detected text type: handwritten (edge_density: 0.011, std: 43.9)
+2025-09-08 17:43:59,390 - INFO - Applied 6 handwritten text preprocessing methods
+2025-09-08 17:44:01,833 - INFO - Image deskewed by -90.00 degrees
+2025-09-08 17:44:24,693 - INFO - Image deskewed by -90.00 degrees
+2025-09-08 17:44:41,478 - INFO - Image deskewed by -90.00 degrees
+2025-09-08 17:44:57,824 - INFO - Generated 12 processed image variants
+2025-09-08 17:50:46,116 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 17:50:46,116 - INFO - Loading EasyOCR readers...
+2025-09-08 17:50:46,618 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 17:50:48,420 - INFO - Deep Translator initialized successfully
+2025-09-08 17:50:48,422 - INFO - Database initialized successfully
+2025-09-08 17:50:48,423 - INFO - Processing: 20250908_175046_.jpg
+2025-09-08 18:07:31,233 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 18:07:31,234 - INFO - Loading EasyOCR readers...
+2025-09-08 18:07:31,505 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 18:07:32,400 - INFO - Deep Translator initialized successfully
+2025-09-08 18:07:52,556 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 18:07:52,563 - INFO - Loading EasyOCR readers...
+2025-09-08 18:07:52,837 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 18:07:53,658 - INFO - Deep Translator initialized successfully
+2025-09-08 18:08:02,915 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 18:08:02,922 - INFO - Loading EasyOCR readers...
+2025-09-08 18:08:03,205 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 18:08:04,085 - INFO - Deep Translator initialized successfully
+2025-09-08 18:08:16,291 - INFO - Processing image: uploads\20250908_180816_fra_sample3.jpg
+2025-09-08 18:08:36,444 - INFO - OCR Extraction completed with confidence: 57.32967032967033
+2025-09-08 18:08:39,739 - INFO - Text translated (lang: auto, confidence: 0.8)
+2025-09-08 18:09:09,001 - INFO - Processing image: uploads\20250908_180908_fra_sample3.jpg
+2025-09-08 18:09:29,368 - INFO - OCR Extraction completed with confidence: 57.32967032967033
+2025-09-08 18:09:29,371 - INFO - Text translated (lang: auto, confidence: 0.8)
+2025-09-08 18:14:06,851 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 18:14:06,852 - INFO - Loading EasyOCR readers...
+2025-09-08 18:14:07,296 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 18:14:08,949 - INFO - Deep Translator initialized successfully
+2025-09-08 18:14:08,954 - INFO - Database initialized successfully
+2025-09-08 18:14:08,964 - INFO - Processing: 20250908_181406_fra_sample2.jpg
+2025-09-08 18:14:27,871 - INFO - Best OCR: tesseract_original_gray (confidence: 92.8%)
+2025-09-08 18:14:27,886 - WARNING - Duplicate record detected - skipping save
+2025-09-08 18:14:27,888 - INFO - Processing completed in 18.92s
+2025-09-08 18:14:27,888 - INFO - Extracted 7 fields
+2025-09-08 18:14:54,719 - INFO - Initializing Advanced OCR Engine...
+2025-09-08 18:14:54,720 - INFO - Loading EasyOCR readers...
+2025-09-08 18:14:55,204 - ERROR - Failed to initialize EasyOCR: Telugu is only compatible with English, try lang_list=["te","en"]
+2025-09-08 18:14:56,169 - INFO - Deep Translator initialized successfully
+2025-09-08 18:14:56,169 - INFO - Database initialized successfully
+2025-09-08 18:14:56,169 - INFO - Processing: 20250908_181454_fra_sample3.jpg
+2025-09-08 18:24:11,267 - INFO - Best OCR: tesseract_adaptive_thresh (confidence: 66.5%)
+2025-09-08 18:24:11,294 - INFO - Record saved to database
+2025-09-08 18:24:11,306 - INFO - Record saved to CSV
+2025-09-08 18:24:11,308 - INFO - Processing completed in 555.14s
+2025-09-08 18:24:11,310 - INFO - Extracted 0 fields
