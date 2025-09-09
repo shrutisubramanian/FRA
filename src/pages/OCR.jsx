@@ -22,48 +22,35 @@ const OCR = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFileUpload(e.dataTransfer.files[0]);
     }
   };
 
-  const handleFileUpload = (uploadedFile) => {
+  const handleFileUpload = async (uploadedFile) => {
     setFile(uploadedFile);
     setIsProcessing(true);
-    
-    // Simulate OCR processing
-    setTimeout(() => {
-      setExtractedText(`FOREST RIGHTS ACT APPLICATION
 
-Applicant Name: Ramesh Kumar
-Village: Devgaon
-District: Gadchiroli
-State: Maharashtra
+    const formData = new FormData();
+    formData.append("file", uploadedFile);
 
-Application Type: Individual Forest Rights Claim
+    try {
+      const response = await fetch("http://localhost:8000/extract-text", {
+        method: "POST",
+        body: formData,
+      });
 
-Details of Forest Land:
-- Survey Number: 45/2
-- Area: 2.5 hectares
-- Type of Land: Agricultural
-- Location: Near Wainganga River
+      if (!response.ok) throw new Error("Failed to process file");
 
-Traditional Use:
-- Cultivation since 1985
-- Growing jowar, cotton, and vegetables
-- Family dependency: 6 members
-
-Supporting Documents:
-✓ Village Assembly Resolution
-✓ Gram Sabha Certificate
-✓ Revenue Records
-✓ Witness Statements
-
-Date of Application: 15th March 2024
-Signature: Ramesh Kumar`);
+      const data = await response.json();
+      setExtractedText(data.gemini_output || "No text extracted.");
+    } catch (error) {
+      console.error("❌ OCR Error:", error);
+      setExtractedText("Error extracting text. Please try again.");
+    } finally {
       setIsProcessing(false);
-    }, 3000);
+    }
   };
 
   const handleFileInput = (e) => {
@@ -72,10 +59,20 @@ Signature: Ramesh Kumar`);
     }
   };
 
+  const handleDownload = () => {
+    const blob = new Blob([extractedText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "extracted_text.txt";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Section */}
-      <section 
+      {/* Header */}
+      <section
         className="py-20 bg-cover bg-center relative"
         style={{
           backgroundImage: `linear-gradient(rgba(188, 139, 79, 0.9), rgba(138, 93, 57, 0.9)), url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1920&h=600&fit=crop')`
@@ -92,13 +89,13 @@ Signature: Ramesh Kumar`);
               OCR Document Processing
             </h1>
             <p className="text-xl text-earth-100">
-              Advanced text extraction from FRA application documents using AI-powered OCR technology
+              AI-powered OCR for extracting text from FRA applications
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* Main */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -110,7 +107,7 @@ Signature: Ramesh Kumar`);
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload Document</h2>
-              
+
               <div
                 className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
                   dragActive 
@@ -130,14 +127,14 @@ Signature: Ramesh Kumar`);
                   onChange={handleFileInput}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
-                
+
                 <div className="space-y-4">
                   {file ? (
                     <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
                   ) : (
                     <Upload className="h-12 w-12 text-gray-400 mx-auto" />
                   )}
-                  
+
                   <div>
                     <p className="text-lg font-medium text-gray-900">
                       {file ? file.name : 'Drop your document here'}
@@ -146,7 +143,7 @@ Signature: Ramesh Kumar`);
                       {file ? 'File uploaded successfully' : 'or click to browse files'}
                     </p>
                   </div>
-                  
+
                   <p className="text-sm text-gray-400">
                     Supports: JPG, PNG, PDF files up to 10MB
                   </p>
@@ -164,7 +161,9 @@ Signature: Ramesh Kumar`);
                       <FileText className="h-8 w-8 text-earth-600" />
                       <div>
                         <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p className="text-sm text-gray-500">
+                          {(file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
                       </div>
                     </div>
                     {isProcessing ? (
@@ -187,7 +186,7 @@ Signature: Ramesh Kumar`);
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Extracted Text</h2>
-              
+
               <div className="bg-white rounded-xl shadow-lg p-6 h-96 overflow-y-auto">
                 {isProcessing ? (
                   <div className="flex items-center justify-center h-full">
@@ -202,7 +201,10 @@ Signature: Ramesh Kumar`);
                       {extractedText}
                     </pre>
                     <div className="mt-6 flex space-x-4">
-                      <button className="flex items-center px-4 py-2 bg-earth-600 text-white rounded-lg hover:bg-earth-700 transition-colors">
+                      <button
+                        onClick={handleDownload}
+                        className="flex items-center px-4 py-2 bg-earth-600 text-white rounded-lg hover:bg-earth-700 transition-colors"
+                      >
                         <Download className="h-4 w-4 mr-2" />
                         Download Text
                       </button>
@@ -223,30 +225,6 @@ Signature: Ramesh Kumar`);
               </div>
             </motion.div>
           </div>
-
-          {/* Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            <div className="text-center p-6 bg-white rounded-xl shadow-md">
-              <FileText className="h-12 w-12 text-earth-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Multi-format Support</h3>
-              <p className="text-gray-600">Process PDFs, images, and scanned documents</p>
-            </div>
-            <div className="text-center p-6 bg-white rounded-xl shadow-md">
-              <CheckCircle className="h-12 w-12 text-forest-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">High Accuracy</h3>
-              <p className="text-gray-600">99%+ accuracy in text extraction</p>
-            </div>
-            <div className="text-center p-6 bg-white rounded-xl shadow-md">
-              <Upload className="h-12 w-12 text-sky-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Batch Processing</h3>
-              <p className="text-gray-600">Process multiple documents simultaneously</p>
-            </div>
-          </motion.div>
         </div>
       </section>
     </div>
