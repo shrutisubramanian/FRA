@@ -30,7 +30,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 1.6,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800"
   },
   {
     "village_id": "TG-NR-002",
@@ -63,7 +64,8 @@
     "is_aspirational_block": true,
     "is_pvtg": false,
     "avg_land_holding_acre": 2.2,
-    "income_level": "Medium"
+    "income_level": "Medium",
+    "image_url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800"
   },
   {
     "village_id": "TG-RG-003",
@@ -96,7 +98,8 @@
     "is_aspirational_block": false,
     "is_pvtg": true,
     "avg_land_holding_acre": 0.9,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800"
   },
   {
     "village_id": "OD-MY-001",
@@ -129,7 +132,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 1.9,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800"
   },
   {
     "village_id": "OD-KL-002",
@@ -162,7 +166,8 @@
     "is_aspirational_block": true,
     "is_pvtg": false,
     "avg_land_holding_acre": 2.8,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800"
   },
   {
     "village_id": "OD-PN-003",
@@ -195,7 +200,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 0.6,
-    "income_level": "Medium"
+    "income_level": "Medium",
+    "image_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800"
   },
   {
     "village_id": "TR-KH-001",
@@ -228,7 +234,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 1.2,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800"
   },
   {
     "village_id": "TR-DR-002",
@@ -261,7 +268,8 @@
     "is_aspirational_block": true,
     "is_pvtg": true,
     "avg_land_holding_acre": 0.4,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800"
   },
   {
     "village_id": "TR-WT-003",
@@ -294,7 +302,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 2.6,
-    "income_level": "Medium"
+    "income_level": "Medium",
+    "image_url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800"
   },
   {
     "village_id": "MP-CH-001",
@@ -327,7 +336,8 @@
     "is_aspirational_block": true,
     "is_pvtg": true,
     "avg_land_holding_acre": 1.1,
-    "income_level": "Low"
+    "income_level": "Low",
+    "image_url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800"
   },
   {
     "village_id": "MP-BP-002",
@@ -360,7 +370,8 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 1.9,
-    "income_level": "Medium"
+    "income_level": "Medium",
+    "image_url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800"
   },
   {
     "village_id": "MP-NR-003",
@@ -393,6 +404,7 @@
     "is_aspirational_block": false,
     "is_pvtg": false,
     "avg_land_holding_acre": 3.1,
-    "income_level": "Medium"
+    "income_level": "Medium",
+    "image_url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800"
   }
 ]

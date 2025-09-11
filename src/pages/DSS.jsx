@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BarChart3 } from "lucide-react";
 
 const API_BASE = "http://127.0.0.1:8000";
 
@@ -18,10 +19,14 @@ function StatsOverview({ villages }) {
   const totalPopulation = villages.reduce((sum, v) => sum + v.population, 0);
   const avgForestCover = villages.length > 0 ? villages.reduce((sum, v) => sum + v.pct_forest_cover, 0) / villages.length : 0;
   const cfrVillages = villages.filter(v => v.has_cfr).length;
-  const highSTPopulation = villages.filter(v => v.pct_st_population > 50).length;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="bg-white rounded-xl shadow-lg p-6 mb-8"
+    >
       <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <IconTrendingUp />
         Overview Statistics
@@ -44,7 +49,7 @@ function StatsOverview({ villages }) {
           <div className="text-sm text-purple-600">CFR Available</div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -101,11 +106,6 @@ function MatchedPopover({ conditions }) {
             transition={{ type: "spring", damping: 20, stiffness: 250 }}
             className="w-80"
           >
-            <div className={`absolute left-1/2 transform -translate-x-1/2 w-0 h-0 ${
-              pos.transform?.includes("-100%") 
-                ? 'border-l-6 border-r-6 border-t-6 border-transparent border-t-white'
-                : 'border-l-6 border-r-6 border-b-6 border-transparent border-b-white'
-            } filter drop-shadow-sm`} />
             <div className="bg-white border border-gray-200 rounded-lg p-4 max-h-56 overflow-y-auto shadow-xl text-xs text-gray-600">
               {conditions.map((c, i) => (
                 <div key={i} className="mb-2 p-2 bg-gray-50 rounded border-l-4 border-blue-200">
@@ -130,22 +130,25 @@ function MatchedPopover({ conditions }) {
   );
 }
 
-/* ----------  enhanced village card  ---------- */
+/* ----------  village card  ---------- */
 function VillageCard({ v, open, onClick, recLoading, recommendations }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.8 }}
       className="group"
     >
       <div
         className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100"
         onClick={onClick}
       >
-        {/* Header with gradient */}
-        <div className="h-40 bg-gradient-to-br from-green-400 via-green-500 to-green-600 relative overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+        {/* Header with optional image */}
+        <div
+          className="h-40 relative overflow-hidden bg-gradient-to-br from-green-400 via-green-500 to-green-600"
+          style={v.image_url ? { backgroundImage: `url(${v.image_url})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
             <IconMapPin className="w-8 h-8 mb-2 opacity-90" />
             <h3 className="text-lg font-bold text-center px-4">{v.village_name}</h3>
@@ -171,7 +174,6 @@ function VillageCard({ v, open, onClick, recLoading, recommendations }) {
             </div>
           </div>
 
-          {/* Key metrics grid */}
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
               <IconHome className="w-4 h-4 text-blue-600" />
@@ -218,65 +220,43 @@ function VillageCard({ v, open, onClick, recLoading, recommendations }) {
         </div>
       </div>
 
+      {/* Modal Popup */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mt-4 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40"
           >
-            {recLoading ? (
-              <div className="p-8 text-center">
-                <div className="inline-flex items-center gap-3">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                  <span className="text-gray-600">Analyzing village eligibility...</span>
+            <div className="relative bg-white rounded-xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+              {recLoading ? (
+                <div className="p-8 text-center">
+                  <div className="inline-flex items-center gap-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    <span className="text-gray-600">Analyzing village eligibility...</span>
+                  </div>
                 </div>
-              </div>
-            ) : recommendations ? (
-              <div className="p-6">
-                {/* Eligible schemes */}
-                <div className="mb-6">
-                  <h4 className="text-lg font-bold text-green-700 mb-4 flex items-center gap-2">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-sm">✓</span>
-                    </div>
-                    Eligible Schemes ({recommendations.eligible_schemes?.length || 0})
-                  </h4>
+              ) : recommendations ? (
+                <div className="p-6">
+                  <h4 className="text-lg font-bold text-green-700 mb-4">Eligible Schemes</h4>
                   {recommendations.eligible_schemes?.length > 0 ? (
                     <div className="space-y-3">
                       {recommendations.eligible_schemes.map(s => (
                         <div key={s.scheme_id} className="border-l-4 border-green-500 bg-green-50 rounded-r-lg p-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h5 className="font-semibold text-green-800 mb-1">{s.scheme_name}</h5>
-                              <p className="text-sm text-green-700 mb-2">{s.benefit}</p>
-                              {s.matched_conditions && (
-                                <MatchedPopover conditions={s.matched_conditions} />
-                              )}
-                            </div>
-                          </div>
+                          <h5 className="font-semibold text-green-800 mb-1">{s.scheme_name}</h5>
+                          <p className="text-sm text-green-700 mb-2">{s.benefit}</p>
+                          {s.matched_conditions && <MatchedPopover conditions={s.matched_conditions} />}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-green-600 bg-green-50 p-4 rounded-lg">
-                      No schemes currently available for this village.
-                    </div>
+                    <div className="text-green-600 bg-green-50 p-4 rounded-lg">No schemes available</div>
                   )}
-                </div>
-
-                {/* Not eligible schemes */}
-                {recommendations.not_eligible_schemes?.length > 0 && (
-                  <div>
-                    <h4 className="text-lg font-bold text-red-700 mb-4 flex items-center gap-2">
-                      <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                        <span className="text-red-600 text-sm">×</span>
-                      </div>
-                      Not Eligible ({recommendations.not_eligible_schemes.length})
-                    </h4>
-                    <div className="space-y-3">
+                  {recommendations.not_eligible_schemes?.length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="text-lg font-bold text-red-700 mb-4">Not Eligible</h4>
                       {recommendations.not_eligible_schemes.slice(0, 3).map(s => (
                         <div key={s.scheme_id} className="border-l-4 border-red-300 bg-red-50 rounded-r-lg p-4">
                           <h5 className="font-semibold text-red-800 mb-1">{s.scheme_name}</h5>
@@ -284,14 +264,18 @@ function VillageCard({ v, open, onClick, recLoading, recommendations }) {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="p-6 text-center text-gray-500">
-                Failed to load recommendations. Please try again.
-              </div>
-            )}
+                  )}
+                </div>
+              ) : (
+                <div className="p-6 text-center text-gray-500">Failed to load recommendations.</div>
+              )}
+              <button
+                onClick={onClick}
+                className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow"
+              >
+                ✕
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -322,18 +306,16 @@ export default function DSS() {
       setRecommendations(null);
       return; 
     }
-    
     setSelectedId(id);
     setRecLoading(true);
     setRecommendations(null);
-    
     try {
       const r = await fetch(`${API_BASE}/village/${id}/eligibility`);
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const d = await r.json();
       setRecommendations(d);
     } catch (e) {
-      console.error('Failed to fetch recommendations:', e);
+      console.error('Failed:', e);
       setRecommendations({ eligible_schemes: [], not_eligible_schemes: [] });
     } finally {
       setRecLoading(false);
@@ -341,52 +323,44 @@ export default function DSS() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading villages...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center text-red-600">
-          <p className="text-lg font-semibold mb-2">Failed to load villages</p>
-          <p className="text-sm">Error: {error}</p>
-        </div>
-      </div>
-    );
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">FRA Decision Support System</h1>
-              <p className="text-gray-600 mt-1">Village eligibility analysis and scheme recommendations</p>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-blue-600">{villages.length}</div>
-              <div className="text-sm text-gray-500">Villages Available</div>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <section 
+        className="py-20 bg-cover bg-center relative"
+        style={{
+          backgroundImage: `linear-gradient(rgba(37, 99, 235, 0.9), rgba(29, 78, 216, 0.9)), url('https://images.unsplash.com/photo-1503264116251-35a269479413?w=1920&h=600&fit=crop')`
+        }}
+      >
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <BarChart3 className="h-16 w-16 text-white mx-auto mb-6" />
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              FRA Decision Support System
+            </h1>
+            <p className="text-xl text-blue-100">
+              Village eligibility analysis and scheme recommendations
+            </p>
+          </motion.div>
         </div>
-      </header>
+      </section>
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Stats Overview */}
         <StatsOverview villages={villages} />
-
-        {/* Villages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {villages.map(v => (
             <VillageCard
               key={v.village_id}
@@ -397,8 +371,7 @@ export default function DSS() {
               recommendations={selectedId === v.village_id ? recommendations : null}
             />
           ))}
-        </div>
-
+        </motion.div>
         {villages.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No villages found.</p>
