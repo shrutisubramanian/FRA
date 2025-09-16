@@ -36,7 +36,7 @@ const OCR = () => {
     formData.append("file", uploadedFile);
 
     try {
-      const response = await fetch("http://localhost:8000/extract-text", {
+      const response = await fetch("http://localhost:8000/extract-text/4", {
         method: "POST",
         body: formData,
       });
