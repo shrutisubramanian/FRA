@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileText, CheckCircle, AlertCircle, Download } from 'lucide-react';
+import { Upload, FileText, CheckCircle } from 'lucide-react';
 
 const OCR = () => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState(null);
-  const [extractedText, setExtractedText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -36,18 +36,18 @@ const OCR = () => {
     formData.append("file", uploadedFile);
 
     try {
-      const response = await fetch("http://localhost:8000/extract-text/4", {
+      const response = await fetch("http://localhost:8000/extract-text/9", {
         method: "POST",
         body: formData,
       });
 
       if (!response.ok) throw new Error("Failed to process file");
 
-      const data = await response.json();
-      setExtractedText(data.gemini_output || "No text extracted.");
+      // ✅ show popup only if backend returns 200
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
       console.error("❌ OCR Error:", error);
-      setExtractedText("Error extracting text. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -59,18 +59,15 @@ const OCR = () => {
     }
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([extractedText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "extracted_text.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* ✅ Popup Notification */}
+      {showPopup && (
+        <div className="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+          Data has been added to database
+        </div>
+      )}
+
       {/* Header */}
       <section
         className="py-20 bg-cover bg-center relative"
@@ -97,16 +94,16 @@ const OCR = () => {
 
       {/* Main */}
       <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-12">
             
             {/* Upload Section */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload Document</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Upload Document</h2>
 
               <div
                 className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
@@ -177,52 +174,6 @@ const OCR = () => {
                   </div>
                 </motion.div>
               )}
-            </motion.div>
-
-            {/* Results Section */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Extracted Text</h2>
-
-              <div className="bg-white rounded-xl shadow-lg p-6 h-96 overflow-y-auto">
-                {isProcessing ? (
-                  <div className="flex items-center justify-center h-full">
-                    <div className="text-center">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-earth-600 mx-auto mb-4"></div>
-                      <p className="text-gray-600">Processing document...</p>
-                    </div>
-                  </div>
-                ) : extractedText ? (
-                  <div>
-                    <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono leading-relaxed">
-                      {extractedText}
-                    </pre>
-                    <div className="mt-6 flex space-x-4">
-                      <button
-                        onClick={handleDownload}
-                        className="flex items-center px-4 py-2 bg-earth-600 text-white rounded-lg hover:bg-earth-700 transition-colors"
-                      >
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Text
-                      </button>
-                      <button className="flex items-center px-4 py-2 bg-forest-600 text-white rounded-lg hover:bg-forest-700 transition-colors">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Process Application
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-400">
-                    <div className="text-center">
-                      <AlertCircle className="h-12 w-12 mx-auto mb-4" />
-                      <p>Upload a document to see extracted text here</p>
-                    </div>
-                  </div>
-                )}
-              </div>
             </motion.div>
           </div>
         </div>

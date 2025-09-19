@@ -1,6 +1,6 @@
 /* WebGIS.jsx */
 import React, { useEffect, useMemo, useState } from "react";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Map, Layers, Leaf, Droplets, Wheat } from "lucide-react";
 import { motion } from "framer-motion";
@@ -18,6 +18,14 @@ const ASSET_STYLES = {
 
 const INITIAL_CENTER = [22.351114, 78.66774];
 const INITIAL_ZOOM   = 5;
+
+// State center coordinates
+const mapCenters = {
+  "Madhya Pradesh": [22.9734, 78.6569],
+  "Telangana": [17.8741, 79.2312],
+  "Odisha": [20.2976, 85.8277],
+  "Tripura": [23.7533, 91.7371],
+};
 
 const FILE_LIST = [
   "india.geojson",
@@ -59,6 +67,17 @@ const buildPopup = ({ name, state, category, description, canopy_density, water_
 /* style picker ----------------------------------------------------- */
 const getStyle = (category) => ASSET_STYLES[category] ?? {};
 
+/* map controller --------------------------------------------------- */
+function MapController({ state }) {
+  const map = useMap();
+  useEffect(() => {
+    if (state && mapCenters[state]) {
+      map.flyTo(mapCenters[state], 9);
+    }
+  }, [state, map]);
+  return null;
+}
+
 /* ------------------------------------------------------------------ */
 /* 3.  MAIN COMPONENT                                                 */
 /* ------------------------------------------------------------------ */
@@ -66,10 +85,10 @@ export default function WebGIS() {
   /* 3-a  local state ------------------------------------------------- */
   const [geojson, setGeojson]           = useState(null); // full dataset
   const [layers, setLayers]             = useState({ forest: true, water: true, agriculture: true });
-  const [states, setStates]             = useState({
-    "Madhya Pradesh": true, Odisha: true, Tripura: true, Telangana: true,
-  });
+  const [selectedState, setSelectedState] = useState("");
   const [basemap, setBasemap]           = useState("light");
+
+  const STATES_LIST = ["Madhya Pradesh", "Odisha", "Tripura", "Telangana"];
 
   /* 3-b  load once --------------------------------------------------- */
   useEffect(() => {
@@ -82,12 +101,12 @@ export default function WebGIS() {
 
   /* 3-c  filtered data (memoised) ------------------------------------ */
   const filtered = useMemo(() => {
-    if (!geojson) return null;
+    if (!geojson || !selectedState) return null;
     const f = geojson.features.filter(
-      (ft) => layers[ft.properties.category] && states[ft.properties.state]
+      (ft) => layers[ft.properties.category] && ft.properties.state === selectedState
     );
     return f.length ? { ...geojson, features: f } : null;
-  }, [geojson, layers, states]);
+  }, [geojson, layers, selectedState]);
 
   /* 3-d  tile layer switch ------------------------------------------ */
   const tileLayer = useMemo(() => {
@@ -188,22 +207,18 @@ export default function WebGIS() {
                 {/* states ---------------------------------------------- */}
                 <div className="mb-6">
                   <h3 className="font-semibold text-gray-900 mb-2">States</h3>
-                  <div className="space-y-2">
-                    {Object.keys(states).map((st) => (
-                      <label
-                        key={st}
-                        className="flex items-center space-x-2 p-3 rounded-lg bg-gray-50 border border-gray-200 cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={states[st]}
-                          onChange={(e) => setStates((s) => ({ ...s, [st]: e.target.checked }))}
-                          className="form-checkbox h-5 w-5 text-gray-600 rounded"
-                        />
-                        <span className="text-gray-700 font-medium">{st}</span>
-                      </label>
+                  <select
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                    className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                  >
+                    <option value="">Select a State</option>
+                    {STATES_LIST.map((st) => (
+                      <option key={st} value={st}>
+                        {st}
+                      </option>
                     ))}
-                  </div>
+                  </select>
                 </div>
 
                 {/* basemap --------------------------------------------- */}
@@ -241,6 +256,13 @@ export default function WebGIS() {
                         data={filtered}
                         style={(ft) => getStyle(ft.properties.category)}
                         onEachFeature={(ft, layer) => layer.bindPopup(buildPopup(ft.properties))}
+                      />
+                    )}
+                    {selectedState && <MapController state={selectedState} />}
+                    {!selectedState && (
+                      <GeoJSON
+                        data={geojson.features.filter(ft => ft.properties.name === "India")}
+                        style={{ fillColor: "#cccccc", color: "#666666", weight: 1, fillOpacity: 0.2 }}
                       />
                     )}
 
