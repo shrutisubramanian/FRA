@@ -1,0 +1,404 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Bandhavgarh National Park",
+                "state": "Madhya Pradesh",
+                "canopy_density": "Dense"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [80.9619, 23.6994],
+                        [81.0287, 23.6994],
+                        [81.0287, 23.7225],
+                        [80.9619, 23.7225],
+                        [80.9619, 23.6994]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Panna Biosphere Reserve",
+                "state": "Madhya Pradesh",
+                "canopy_density": "Moderate"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [79.9200, 24.7100],
+                        [80.1800, 24.7100],
+                        [80.1800, 24.9200],
+                        [79.9200, 24.9200],
+                        [79.9200, 24.7100]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Kanha National Park",
+                "state": "Madhya Pradesh",
+                "canopy_density": "Dense"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [80.5800, 22.1600],
+                        [80.7800, 22.1600],
+                        [80.7800, 22.3600],
+                        [80.5800, 22.3600],
+                        [80.5800, 22.1600]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Gandhi Sagar Lake",
+                "state": "Madhya Pradesh",
+                "water_type": "Reservoir"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [75.5333, 24.7067],
+                        [75.5533, 24.7067],
+                        [75.5533, 24.7267],
+                        [75.5333, 24.7267],
+                        [75.5333, 24.7067]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Bargi Dam",
+                "state": "Madhya Pradesh",
+                "water_type": "Dam Reservoir"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [79.8800, 22.9800],
+                        [79.9200, 22.9800],
+                        [79.9200, 23.0200],
+                        [79.8800, 23.0200],
+                        [79.8800, 22.9800]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "agriculture",
+                "name": "Raisen District Agricultural Area",
+                "state": "Madhya Pradesh",
+                "crop_type": "Mixed Crops"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [77.3500, 23.3300],
+                        [77.8000, 23.3300],
+                        [77.8000, 23.5500],
+                        [77.3500, 23.5500],
+                        [77.3500, 23.3300]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Simlipal National Park",
+                "state": "Odisha",
+                "canopy_density": "Dense"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [86.0600, 21.5167],
+                        [86.3600, 21.5167],
+                        [86.3600, 22.0333],
+                        [86.0600, 22.0333],
+                        [86.0600, 21.5167]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Bhitar Kanika Wildlife Sanctuary",
+                "state": "Odisha",
+                "canopy_density": "Moderate"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [87.0400, 20.4600],
+                        [87.1600, 20.4600],
+                        [87.1600, 20.5800],
+                        [87.0400, 20.5800],
+                        [87.0400, 20.4600]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Mahanadi River",
+                "state": "Odisha",
+                "water_type": "River"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [86.7000, 20.2900],
+                        [86.7200, 20.2900],
+                        [86.7200, 20.3100],
+                        [86.7000, 20.3100],
+                        [86.7000, 20.2900]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Chilika Lake",
+                "state": "Odisha",
+                "water_type": "Brackish Water Lagoon"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [85.3000, 19.6800],
+                        [85.3200, 19.6800],
+                        [85.3200, 19.7000],
+                        [85.3000, 19.7000],
+                        [85.3000, 19.6800]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "agriculture",
+                "name": "Bhubaneswar Agricultural Area",
+                "state": "Odisha",
+                "crop_type": "Rice"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [85.8000, 20.2500],
+                        [85.9000, 20.2500],
+                        [85.9000, 20.3500],
+                        [85.8000, 20.3500],
+                        [85.8000, 20.2500]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Jampui Hills Forest",
+                "state": "Tripura",
+                "canopy_density": "Dense"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [92.3000, 24.0500],
+                        [92.4000, 24.0500],
+                        [92.4000, 24.1500],
+                        [92.3000, 24.1500],
+                        [92.3000, 24.0500]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Sepahijala Wildlife Sanctuary",
+                "state": "Tripura",
+                "canopy_density": "Moderate"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [91.6500, 23.6200],
+                        [91.7500, 23.6200],
+                        [91.7500, 23.7200],
+                        [91.6500, 23.7200],
+                        [91.6500, 23.6200]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Dhalai River",
+                "state": "Tripura",
+                "water_type": "River"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [91.8000, 24.0000],
+                        [91.8200, 24.0000],
+                        [91.8200, 24.0200],
+                        [91.8000, 24.0200],
+                        [91.8000, 24.0000]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "agriculture",
+                "name": "Agartala Agricultural Area",
+                "state": "Tripura",
+                "crop_type": "Rice"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [91.2700, 23.8300],
+                        [91.2900, 23.8300],
+                        [91.2900, 23.8500],
+                        [91.2700, 23.8500],
+                        [91.2700, 23.8300]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Kawal Wildlife Sanctuary",
+                "state": "Telangana",
+                "canopy_density": "Moderate"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [79.2000, 19.1000],
+                        [79.3000, 19.1000],
+                        [79.3000, 19.2000],
+                        [79.2000, 19.2000],
+                        [79.2000, 19.1000]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "forest",
+                "name": "Amrabad Tiger Reserve",
+                "state": "Telangana",
+                "canopy_density": "Dense"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [78.9000, 16.1000],
+                        [79.1000, 16.1000],
+                        [79.1000, 16.3000],
+                        [78.9000, 16.3000],
+                        [78.9000, 16.1000]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "water",
+                "name": "Sriramsagar Reservoir",
+                "state": "Telangana",
+                "water_type": "Reservoir"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [78.4000, 18.8000],
+                        [78.5000, 18.8000],
+                        [78.5000, 18.9000],
+                        [78.4000, 18.9000],
+                        [78.4000, 18.8000]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "category": "agriculture",
+                "name": "Hyderabad Agricultural Area",
+                "state": "Telangana",
+                "crop_type": "Cotton"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [78.4500, 17.3800],
+                        [78.5500, 17.3800],
+                        [78.5500, 17.4800],
+                        [78.4500, 17.4800],
+                        [78.4500, 17.3800]
+                    ]
+                ]
+            }
+        }
+    ]
+}
