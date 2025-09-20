@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileText, CheckCircle } from 'lucide-react';
+import { Upload, FileText, CheckCircle, XCircle } from 'lucide-react';
 
 const OCR = () => {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -31,23 +32,30 @@ const OCR = () => {
   const handleFileUpload = async (uploadedFile) => {
     setFile(uploadedFile);
     setIsProcessing(true);
+    setShowPopup(false);
+    setShowErrorPopup(false);
 
     const formData = new FormData();
     formData.append("file", uploadedFile);
 
     try {
-      const response = await fetch("http://localhost:8000/extract-text/9", {
+      const response = await fetch("http://localhost:8000/extract-text", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Failed to process file");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-      // ✅ show popup only if backend returns 200
+      // Show a success notification if the backend responds with a 200
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
       console.error("❌ OCR Error:", error);
+      // Show an error notification if the request fails
+      setShowErrorPopup(true);
+      setTimeout(() => setShowErrorPopup(false), 3000);
     } finally {
       setIsProcessing(false);
     }
@@ -61,10 +69,17 @@ const OCR = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* ✅ Popup Notification */}
+      {/* ✅ Popup Notification for success */}
       {showPopup && (
         <div className="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
           Data has been added to database
+        </div>
+      )}
+
+      {/* ❌ Popup Notification for error */}
+      {showErrorPopup && (
+        <div className="fixed top-5 right-5 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+          Data could not be added. Please try again.
         </div>
       )}
 
