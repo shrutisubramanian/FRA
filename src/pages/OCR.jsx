@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileText, CheckCircle, XCircle } from 'lucide-react';
+import { Upload, FileText, CheckCircle } from 'lucide-react';
 
 const OCR = () => {
   const [dragActive, setDragActive] = useState(false);
@@ -8,6 +8,7 @@ const OCR = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [directOCR, setDirectOCR] = useState(null); // New state for raw Gemini output
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -34,6 +35,7 @@ const OCR = () => {
     setIsProcessing(true);
     setShowPopup(false);
     setShowErrorPopup(false);
+    setDirectOCR(null); // reset before new upload
 
     const formData = new FormData();
     formData.append("file", uploadedFile);
@@ -48,12 +50,16 @@ const OCR = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Show a success notification if the backend responds with a 200
+      const result = await response.json();
+      console.log("✅ OCR Result:", result);
+
+      // Use directOCR output from backend
+      setDirectOCR(result.directOCR);
+
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 3000);
     } catch (error) {
       console.error("❌ OCR Error:", error);
-      // Show an error notification if the request fails
       setShowErrorPopup(true);
       setTimeout(() => setShowErrorPopup(false), 3000);
     } finally {
@@ -69,17 +75,17 @@ const OCR = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* ✅ Popup Notification for success */}
+      {/* Success popup */}
       {showPopup && (
         <div className="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-          Data has been added to database
+          Data has been extracted successfully
         </div>
       )}
 
-      {/* ❌ Popup Notification for error */}
+      {/* Error popup */}
       {showErrorPopup && (
         <div className="fixed top-5 right-5 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-          Data could not be added. Please try again.
+          OCR extraction failed. Please try again.
         </div>
       )}
 
@@ -118,7 +124,9 @@ const OCR = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Upload Document</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Upload Document
+              </h2>
 
               <div
                 className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
@@ -162,31 +170,23 @@ const OCR = () => {
                 </div>
               </div>
 
-              {file && (
+              {/* Extracted Data Display (directOCR) */}
+              {directOCR && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-white rounded-lg shadow-md"
+                  className="mt-8 p-6 bg-white rounded-xl shadow-lg space-y-2"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="h-8 w-8 text-earth-600" />
-                      <div>
-                        <p className="font-medium text-gray-900">{file.name}</p>
-                        <p className="text-sm text-gray-500">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
-                      </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Extracted Data</h3>
+
+                  {Object.entries(directOCR).map(([key, value]) => (
+                    <div key={key} className="flex flex-col">
+                      <span className="font-semibold text-gray-800">{key.replace(/_/g, ' ')}:</span>
+                      <span className="text-gray-700">
+                        {typeof value === 'object' ? JSON.stringify(value, null, 2) : value}
+                      </span>
                     </div>
-                    {isProcessing ? (
-                      <div className="flex items-center space-x-2 text-earth-600">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-earth-600"></div>
-                        <span className="text-sm">Processing...</span>
-                      </div>
-                    ) : (
-                      <CheckCircle className="h-6 w-6 text-green-500" />
-                    )}
-                  </div>
+                  ))}
                 </motion.div>
               )}
             </motion.div>

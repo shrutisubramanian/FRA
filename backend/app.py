@@ -1,4 +1,4 @@
-import os, json, mimetypes
+import os, json, mimetypes, logging
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -7,6 +7,10 @@ import google.generativeai as genai
 from sqlalchemy import create_engine, Column, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+# ----------------- LOGGING -----------------
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # ----------------- PATHS AND DATA LOADING -----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -36,9 +40,9 @@ app.add_middleware(
 )
 
 # ----------------- GEMINI API SETUP -----------------
-YOUR_API_KEY = "AIzaSyA9qMPT7YzCd046wErm0ZNT0kUP2GX6vZc" # Replace with your actual API key
+YOUR_API_KEY = "AIzaSyA9qMPT7YzCd046wErm0ZNT0kUP2GX6vZc"  # Replace with your actual API key
 genai.configure(api_key=YOUR_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # ----------------- DATABASE SETUP -----------------
 DATABASE_URL = "sqlite:///./extracted_data.db"
@@ -47,25 +51,25 @@ Base = declarative_base()
 
 class ExtractedData(Base):
     __tablename__ = "extracted_data"
-    application_id = Column(Integer, primary_key=True, index=True, autoincrement=True) # Added autoincrement
+    application_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     filename = Column(String)
     claimant_name = Column(String)
     spouse_name = Column(String)
     father_mother_name = Column(String)
-    address = Column(String)
+    address = Column(Text)  # stored as JSON string
     village = Column(String)
     gram_panchayat = Column(String)
     tehsil_taluka = Column(String)
     district = Column(String)
     scheduled_tribe = Column(String)
     other_traditional_forest_dweller = Column(String)
-    other_family_members = Column(Text)
+    other_family_members = Column(Text)  # stored as JSON string
 
 Base.metadata.create_all(bind=engine)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # ----------------- OCR ROUTES -----------------
-# Removed application_id from the URL and function signature
+# ----------------- OCR ROUTES -----------------
 @app.post("/extract-text")
 async def extract_text(file: UploadFile = File(...)):
     try:
@@ -86,39 +90,38 @@ async def extract_text(file: UploadFile = File(...)):
             [uploaded_file,
              "Extract all fields from this document or image. "
              "1. Provide a human-readable summary. "
-             "2. Also return ONLY the structured fields in pure JSON format at the end. "
-             "Example:\nSummary: John Doe, 28 years old, lives in Mumbai.\nJSON: {\"name\": \"John Doe\", \"age\": \"28\", \"address\": \"Mumbai\"}"]
+             "2. Also return ONLY the structured fields in pure JSON format at the end."]
         )
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": f"AI model processing failed: {e}"})
 
     output_text = response.text.strip()
-    fields_data = {}
-
+    directOCR = {}
     try:
         start = output_text.find("{")
         end = output_text.rfind("}") + 1
         if start != -1 and end != -1:
             json_str = output_text[start:end]
-            fields_data = json.loads(json_str)
+            directOCR = json.loads(json_str)  # <-- this is your raw Gemini output
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": f"Failed to parse JSON from AI model output: {e}"})
 
+    # Save to DB as before
     try:
         db = SessionLocal()
         new_entry = ExtractedData(
             filename=file.filename,
-            claimant_name=fields_data.get("claimant_name"),
-            spouse_name=fields_data.get("spouse_name"),
-            father_mother_name=fields_data.get("father_mother_name"),
-            address=fields_data.get("address"),
-            village=fields_data.get("village"),
-            gram_panchayat=fields_data.get("gram_panchayat"),
-            tehsil_taluka=fields_data.get("tehsil_taluka"),
-            district=fields_data.get("district"),
-            scheduled_tribe=fields_data.get("scheduled_tribe"),
-            other_traditional_forest_dweller=fields_data.get("other_traditional_forest_dweller"),
-            other_family_members=json.dumps(fields_data.get("other_family_members", []))
+            claimant_name=directOCR.get("claimant_name"),
+            spouse_name=directOCR.get("spouse_name"),
+            father_mother_name=directOCR.get("father_mother_name"),
+            address=directOCR.get("address"),
+            village=directOCR.get("village"),
+            gram_panchayat=directOCR.get("gram_panchayat"),
+            tehsil_taluka=directOCR.get("tehsil_taluka"),
+            district=directOCR.get("district"),
+            scheduled_tribe=directOCR.get("scheduled_tribe"),
+            other_traditional_forest_dweller=directOCR.get("other_traditional_forest_dweller"),
+            other_family_members=json.dumps(directOCR.get("other_family_members", []))
         )
         db.add(new_entry)
         db.commit()
@@ -127,7 +130,12 @@ async def extract_text(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": f"Database write failed: {e}"})
 
-    return JSONResponse(content={"message": "Data extracted and stored successfully.", "data": fields_data})
+    # Return both DB and directOCR separately
+    return JSONResponse(content={
+        "message": "Data extracted and stored successfully.",
+        "db_data": new_entry.application_id,  # optional, just an ID
+        "directOCR": directOCR  # <-- frontend should use this
+    })
 
 # ----------------- DSS ROUTES -----------------
 @app.get("/health")
