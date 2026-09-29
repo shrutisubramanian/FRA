@@ -1,0 +1,336 @@
+[
+  {
+    "scheme_id": "CSS-001",
+    "scheme_name": "PMAY-G (Gramin)",
+    "description": "Pucca houses for eligible ST households (priority where households lack pucca houses).",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Village has ST households with <100% pucca house coverage; priority to villages with lower pct_pucca_houses.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "pct_pucca_houses",
+          "op": "<",
+          "value": 100
+        }
+      ]
+    },
+    "benefit": "Grant for pucca house construction"
+  },
+  {
+    "scheme_id": "CSS-002",
+    "scheme_name": "PMGSY (Road Connectivity)",
+    "description": "All-weather roads to connect targeted ST habitations.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Village lacking all-weather road connectivity or remote habitations; high priority for connectivity gaps.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "tourism_potential",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "is_aspirational_block",
+          "op": "==",
+          "value": true
+        }
+      ]
+    },
+    "benefit": "Road construction funding"
+  },
+  {
+    "scheme_id": "CSS-003",
+    "scheme_name": "Jal Jeevan Mission (JJM)",
+    "description": "Functional Household Tap Connections (FHTC) and community taps for small hamlets (≤20 HH).",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Village FHTC coverage <100% OR presence of hamlets with ≤20 HH OR groundwater_index = 'Low'.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "fhtc_coverage_pct",
+          "op": "<",
+          "value": 100
+        },
+        {
+          "field": "hamlets_leq_20hh",
+          "op": ">",
+          "value": 0
+        },
+        {
+          "field": "groundwater_index",
+          "op": "==",
+          "value": "Low"
+        }
+      ]
+    },
+    "benefit": "Piped water supply infrastructure and community taps."
+  },
+  {
+    "scheme_id": "CSS-004",
+    "scheme_name": "RDSS (House Electrification)",
+    "description": "Electrification of unelectrified households and public institutions.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Village with percent unelectrified households > 0.",
+    "eligibility": {
+      "logic": "all",
+      "conditions": [
+        {
+          "field": "pct_un_electrified",
+          "op": ">",
+          "value": 0
+        }
+      ]
+    },
+    "benefit": "Grid connection or electrification support"
+  },
+  {
+    "scheme_id": "CSS-005",
+    "scheme_name": "New Solar Power Scheme (Off-grid)",
+    "description": "Solar systems for unelectrified households/public institutions (up to 2-3 kW).",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Unelectrified households or public institutions not covered by grid.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "pct_un_electrified",
+          "op": ">",
+          "value": 5
+        },
+        {
+          "field": "mobile_connectivity",
+          "op": "==",
+          "value": "None"
+        }
+      ]
+    },
+    "benefit": "Subsidy for off-grid solar systems"
+  },
+  {
+    "scheme_id": "CSS-006",
+    "scheme_name": "MMU (NHM)",
+    "description": "Mobile Medical Units for habitations where nearest health facility is far.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Nearest health centre >10 km in plain areas OR >5 km in hilly areas.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "nearest_health_center_km",
+          "op": ">",
+          "value": 10,
+          "applies_if": {
+            "field": "is_hilly_area",
+            "op": "==",
+            "value": false
+          }
+        },
+        {
+          "field": "nearest_health_center_km",
+          "op": ">",
+          "value": 5,
+          "applies_if": {
+            "field": "is_hilly_area",
+            "op": "==",
+            "value": true
+          }
+        }
+      ]
+    },
+    "benefit": "Provision of MMU services to village"
+  },
+  {
+    "scheme_id": "CSS-007",
+    "scheme_name": "PMJAY (Ayushman Bharat)",
+    "description": "Health insurance coverage for eligible households under the Abhiyan.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "All uncovered eligible households in target villages should be enrolled.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "income_level",
+          "op": "in",
+          "value": [
+            "Low",
+            "Very Low"
+          ]
+        }
+      ]
+    },
+    "benefit": "Health insurance coverage (PMJAY)"
+  },
+  {
+    "scheme_id": "CSS-008",
+    "scheme_name": "PMUY (Ujjwala)",
+    "description": "LPG connections to uncovered eligible households.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Household LPG coverage lower than threshold.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "pct_lpg_coverage",
+          "op": "<",
+          "value": 80
+        }
+      ]
+    },
+    "benefit": "LPG connection subsidy"
+  },
+  {
+    "scheme_id": "CSS-009",
+    "scheme_name": "PMMSY (Fisheries)",
+    "description": "Support for aquaculture and fish culture; special allocation for CFR holders and tribal fishermen.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Presence of water bodies/coastal/fisher communities OR CFR holders interested in pisciculture.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "tourism_potential",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "has_cfr",
+          "op": "==",
+          "value": true
+        }
+      ]
+    },
+    "benefit": "Subsidies for aquaculture units and community support"
+  },
+  {
+    "scheme_id": "CSS-010",
+    "scheme_name": "NLM (National Livestock Mission)",
+    "description": "Animal husbandry & livestock support for FRA beneficiaries.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "FRA patta holders or villages with interest in livestock (SHG presence).",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "num_fra_patta_holders",
+          "op": ">",
+          "value": 0
+        },
+        {
+          "field": "num_shgs",
+          "op": ">",
+          "value": 5
+        }
+      ]
+    },
+    "benefit": "Subsidies/assistance for livestock rearing"
+  },
+  {
+    "scheme_id": "CSS-011",
+    "scheme_name": "MGNREGA (Works)",
+    "description": "Employment for public works including farm-ponds and irrigation works.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Villages with significant non-irrigated farmland and lower irrigation coverage.",
+    "eligibility": {
+      "logic": "all",
+      "conditions": [
+        {
+          "field": "total_farmland_ha",
+          "op": ">",
+          "value": 50
+        },
+        {
+          "field": "irrigated_area_ha",
+          "op": "<",
+          "value": 0.5
+        }
+      ]
+    },
+    "benefit": "Wage employment for public works (farm ponds, irrigation)"
+  },
+  {
+    "scheme_id": "CSS-012",
+    "scheme_name": "PMAAGY (MoTA multi-sector)",
+    "description": "Integrated village development, FRA support, marketing centres, and project management funds.",
+    "target_states": [
+      "Telangana",
+      "Odisha",
+      "Tripura",
+      "Madhya Pradesh"
+    ],
+    "eligibility_human": "Tribal-majority villages, FRA patta concentrations, or areas needing integrated development.",
+    "eligibility": {
+      "logic": "any",
+      "conditions": [
+        {
+          "field": "pct_st_population",
+          "op": ">=",
+          "value": 50
+        },
+        {
+          "field": "num_fra_patta_holders",
+          "op": ">",
+          "value": 20
+        }
+      ]
+    },
+    "benefit": "Integrated development package and grants"
+  }
+]
